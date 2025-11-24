@@ -18,3 +18,24 @@ Implemented cryptocurrency tools mirroring the existing finance tools structure.
 ### Verification
 -   Created and ran `verify_upbit.py` to confirm successful data fetching from Upbit.
 -   Simulated an upstream merge conflict to verify the maintenance guide.
+
+## 2025-11-24: LangSmith Integration
+
+### Summary
+Added LangSmith tracing and monitoring support to enable detailed debugging, token usage tracking, and performance analysis.
+
+### Changes
+1.  **Documentation**:
+    -   Updated `README.md` with LangSmith setup instructions.
+    -   Added optional environment variables for LangSmith configuration.
+
+### Benefits
+-   **Token Usage Tracking**: Monitor exact token consumption per request.
+-   **Execution Tracing**: Visualize agent decision flow and tool calls.
+-   **Performance Analysis**: Track latency and identify bottlenecks.
+-   **Debugging**: View detailed input/output at each step.
+
+### Verification
+-   Tested LangSmith integration with BTC price query.
+-   Confirmed traces appear in LangSmith dashboard at `https://smith.langchain.com/o/default/projects/p/dexter`.
+
