@@ -4,11 +4,11 @@ This guide explains how to use the cryptocurrency tools in Dexter.
 
 ## Overview
 
-The crypto tools allow you to fetch real-time and historical cryptocurrency data using the Financial Datasets API.
+The crypto tools allow you to fetch real-time and historical cryptocurrency data using the **Upbit API** (free, no key required).
 
 ## Prerequisites
 
-Ensure you have the `FINANCIAL_DATASETS_API_KEY` environment variable set.
+None. The Upbit API is public.
 
 ## Available Tools
 
@@ -17,7 +17,7 @@ Ensure you have the `FINANCIAL_DATASETS_API_KEY` environment variable set.
 Fetches the latest price data for a specific cryptocurrency.
 
 **Parameters:**
-- `ticker`: The symbol of the cryptocurrency (e.g., "BTC", "ETH").
+- `ticker`: The symbol of the cryptocurrency (e.g., "BTC", "KRW-BTC"). Defaults to KRW market.
 
 **Example Usage (Python):**
 ```python
@@ -29,14 +29,14 @@ print(snapshot)
 
 ### 2. `get_crypto_prices`
 
-Retrieves historical price data over a specified range.
+Retrieves historical price candles.
 
 **Parameters:**
 - `ticker`: The symbol of the cryptocurrency.
-- `interval`: Time interval ("minute", "day", "week", "month", "year").
-- `interval_multiplier`: Multiplier for the interval (default: 1).
-- `start_date`: Start date (YYYY-MM-DD).
-- `end_date`: End date (YYYY-MM-DD).
+- `interval`: Time interval ("minute", "day", "week", "month").
+- `interval_multiplier`: Multiplier for minutes (1, 3, 5, 10, 15, 30, 60, 240).
+- `count`: Number of candles to retrieve (default: 20).
+- `to`: Last candle time (optional).
 
 **Example Usage (Python):**
 ```python
@@ -45,8 +45,7 @@ from dexter.tools.crypto.prices import get_crypto_prices
 prices = get_crypto_prices.invoke({
     "ticker": "ETH",
     "interval": "day",
-    "start_date": "2023-01-01",
-    "end_date": "2023-01-07"
+    "count": 7
 })
 print(prices)
 ```
@@ -63,11 +62,11 @@ These tools are automatically registered in `dexter.tools.TOOLS` and can be used
 
 ## 개요
 
-암호화폐 도구를 사용하면 Financial Datasets API를 통해 실시간 및 과거 암호화폐 데이터를 가져올 수 있습니다.
+암호화폐 도구를 사용하면 **Upbit API** (무료, 키 필요 없음)를 통해 실시간 및 과거 암호화폐 데이터를 가져올 수 있습니다.
 
 ## 사전 요구 사항
 
-`FINANCIAL_DATASETS_API_KEY` 환경 변수가 설정되어 있는지 확인하십시오.
+없음. Upbit API는 공개되어 있습니다.
 
 ## 사용 가능한 도구
 
@@ -76,7 +75,7 @@ These tools are automatically registered in `dexter.tools.TOOLS` and can be used
 특정 암호화폐의 최신 가격 데이터를 가져옵니다.
 
 **매개변수:**
-- `ticker`: 암호화폐 심볼 (예: "BTC", "ETH").
+- `ticker`: 암호화폐 심볼 (예: "BTC", "KRW-BTC"). 기본값은 KRW 마켓입니다.
 
 **사용 예시 (Python):**
 ```python
@@ -88,14 +87,14 @@ print(snapshot)
 
 ### 2. `get_crypto_prices`
 
-지정된 기간 동안의 과거 가격 데이터를 검색합니다.
+과거 가격 캔들 데이터를 검색합니다.
 
 **매개변수:**
 - `ticker`: 암호화폐 심볼.
-- `interval`: 시간 간격 ("minute", "day", "week", "month", "year").
-- `interval_multiplier`: 간격 승수 (기본값: 1).
-- `start_date`: 시작 날짜 (YYYY-MM-DD).
-- `end_date`: 종료 날짜 (YYYY-MM-DD).
+- `interval`: 시간 간격 ("minute", "day", "week", "month").
+- `interval_multiplier`: 분 단위 승수 (1, 3, 5, 10, 15, 30, 60, 240).
+- `count`: 가져올 캔들 개수 (기본값: 20).
+- `to`: 마지막 캔들 시간 (선택 사항).
 
 **사용 예시 (Python):**
 ```python
@@ -104,8 +103,7 @@ from dexter.tools.crypto.prices import get_crypto_prices
 prices = get_crypto_prices.invoke({
     "ticker": "ETH",
     "interval": "day",
-    "start_date": "2023-01-01",
-    "end_date": "2023-01-07"
+    "count": 7
 })
 print(prices)
 ```
