@@ -7,7 +7,7 @@ Dexter is an autonomous financial research agent that thinks, plans, and learns 
 
 ## Overview
 
-Dexter takes complex financial questions and turns them into clear, step-by-step research plans. It runs those tasks using live market data, checks its own work, and refines the results until it has a confident, data-backed answer.  
+Dexter takes complex financial questions and turns them into clear, step-by-step research plans. It runs those tasks using live market data, checks its own work, and refines the results until it has a confident, data-backed answer.
 
 **Key Capabilities:**
 - **Intelligent Task Planning**: Automatically decomposes complex queries into structured research steps
@@ -49,6 +49,12 @@ cp env.example .env
 # Edit .env and add your API keys
 # OPENAI_API_KEY=your-openai-api-key
 # FINANCIAL_DATASETS_API_KEY=your-financial-datasets-api-key
+
+# Optional: LangSmith for tracing and debugging
+# LANGSMITH_API_KEY=your-langsmith-api-key
+# LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+# LANGSMITH_PROJECT=dexter
+# LANGSMITH_TRACING=true
 ```
 
 ### Usage
