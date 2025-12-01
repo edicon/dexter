@@ -39,3 +39,13 @@ Added LangSmith tracing and monitoring support to enable detailed debugging, tok
 -   Tested LangSmith integration with BTC price query.
 -   Confirmed traces appear in LangSmith dashboard at `https://smith.langchain.com/o/default/projects/p/dexter`.
 
+## 2025-11-24: Project Configuration
+
+### Summary
+Added standard configuration files for AI agent collaboration and project rules.
+
+### Changes
+1.  **Configuration**:
+    -   `GEMINI.md`: Defined project rules, coding standards, and language preferences (Korean).
+    -   `AGENTS.md`: Created as a symbolic link to `GEMINI.md` for broader agent compatibility.
+
