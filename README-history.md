@@ -46,6 +46,6 @@ Added standard configuration files for AI agent collaboration and project rules.
 
 ### Changes
 1.  **Configuration**:
-    -   `GEMINI.md`: Defined project rules, coding standards, and language preferences (Korean).
+    -   `GEMINI.md`: Defined project rules, coding standards, and language preferences (Korean). Added explicit rule to consult `MAINTENANCE.md` for upstream sync.
     -   `AGENTS.md`: Created as a symbolic link to `GEMINI.md` for broader agent compatibility.
 
