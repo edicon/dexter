@@ -113,5 +113,9 @@ agent = Agent(
 ### Logging and Tracing
 Dexter integrates custom logging via `dexter.utils.logger` and supports optional tracing and debugging through LangSmith, configured via environment variables.
 
+## Maintenance & Upstream Sync
+- **Sync Guide**: When synchronizing with the upstream repository, you **MUST** consult `MAINTENANCE.md`.
+- **Conflict Resolution**: Follow the specific instructions in `MAINTENANCE.md` for resolving conflicts, especially in `src/dexter/tools/__init__.py`.
+
 ## License
 This project is licensed under the MIT License.
