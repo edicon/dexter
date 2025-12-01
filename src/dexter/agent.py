@@ -2,7 +2,7 @@ from typing import List
 
 from langchain_core.messages import AIMessage
 
-from dexter.model import call_llm, call_llm_stream
+from dexter.model import call_llm, call_llm_stream, DEFAULT_MODEL
 from dexter.prompts import (
     ACTION_SYSTEM_PROMPT,
     get_answer_system_prompt,
@@ -11,7 +11,7 @@ from dexter.prompts import (
     VALIDATION_SYSTEM_PROMPT,
     META_VALIDATION_SYSTEM_PROMPT,
 )
-from dexter.schemas import Answer, IsDone, OptimizedToolArgs, Task, TaskList
+from dexter.schemas import IsDone, OptimizedToolArgs, Task, TaskList
 from dexter.tools import TOOLS
 from dexter.utils.logger import Logger
 from dexter.utils.ui import show_progress
@@ -19,11 +19,12 @@ from dexter.utils.context import ContextManager
 
 
 class Agent:
-    def __init__(self, max_steps: int = 20, max_steps_per_task: int = 5):
+    def __init__(self, max_steps: int = 20, max_steps_per_task: int = 5, model: str = DEFAULT_MODEL):
         self.logger = Logger()
         self.max_steps = max_steps            # global safety cap
         self.max_steps_per_task = max_steps_per_task
-        self.context_manager = ContextManager()
+        self.model = model
+        self.context_manager = ContextManager(model=model)
 
     # ---------- task planning ----------
     @show_progress("Planning tasks...", "Tasks planned")
@@ -36,7 +37,7 @@ class Agent:
         """
         system_prompt = PLANNING_SYSTEM_PROMPT.format(tools=tool_descriptions)
         try:
-            response = call_llm(prompt, system_prompt=system_prompt, output_schema=TaskList)
+            response = call_llm(prompt, system_prompt=system_prompt, output_schema=TaskList, model=self.model)
             tasks = response.tasks
         except Exception as e:
             self.logger._log(f"Planning failed: {e}")
@@ -57,7 +58,7 @@ class Agent:
         Based on the task and the outputs, what should be the next step?
         """
         try:
-            return call_llm(prompt, system_prompt=ACTION_SYSTEM_PROMPT, tools=TOOLS)
+            return call_llm(prompt, system_prompt=ACTION_SYSTEM_PROMPT, tools=TOOLS, model=self.model)
         except Exception as e:
             self.logger._log(f"ask_for_actions failed: {e}")
             return AIMessage(content="Failed to get actions.")
@@ -72,8 +73,10 @@ class Agent:
         Is the task done?
         """
         try:
-            resp = call_llm(prompt, system_prompt=VALIDATION_SYSTEM_PROMPT, output_schema=IsDone)
+            resp = call_llm(prompt, system_prompt=VALIDATION_SYSTEM_PROMPT, output_schema=IsDone, model=self.model)
             return resp.done
+        except KeyboardInterrupt:
+            raise
         except:
             return False
 
@@ -103,7 +106,7 @@ class Agent:
         Use the tasks as a helpful cross-reference, but prioritize whether the query itself is answered.
         """
         try:
-            resp = call_llm(prompt, system_prompt=META_VALIDATION_SYSTEM_PROMPT, output_schema=IsDone)
+            resp = call_llm(prompt, system_prompt=META_VALIDATION_SYSTEM_PROMPT, output_schema=IsDone, model=self.model)
             return resp.done
         except Exception as e:
             self.logger._log(f"Meta-validation failed: {e}")
@@ -132,7 +135,7 @@ class Agent:
         Pay special attention to filtering parameters that would help narrow down results to match the task.
         """
         try:
-            response = call_llm(prompt, model="gpt-4.1", system_prompt=get_tool_args_system_prompt(), output_schema=OptimizedToolArgs)
+            response = call_llm(prompt, system_prompt=get_tool_args_system_prompt(), output_schema=OptimizedToolArgs, model=self.model)
             # Handle case where LLM returns dict directly instead of OptimizedToolArgs
             if isinstance(response, dict):
                 return response if response else initial_args
@@ -185,7 +188,7 @@ class Agent:
         # If no tasks were created, the query is likely out of scope.
         if not tasks:
             # Note: _generate_answer now streams and displays the answer directly
-            answer = self._generate_answer(query, [])
+            answer = self._generate_answer(query)
             return answer
 
         # 2. Loop through tasks until all are complete or max steps are reached.
@@ -328,7 +331,7 @@ class Agent:
             """
         
         # Stream the answer and display it in real-time
-        text_chunks = call_llm_stream(answer_prompt, system_prompt=get_answer_system_prompt())
+        text_chunks = call_llm_stream(answer_prompt, system_prompt=get_answer_system_prompt(), model=self.model)
         accumulated_answer = self.logger.ui.stream_answer(text_chunks)
         
         return accumulated_answer

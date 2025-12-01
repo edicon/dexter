@@ -6,23 +6,25 @@ from typing import List, Dict, Any, Optional
 from pathlib import Path
 from pydantic import BaseModel
 
-from dexter.model import call_llm
+from dexter.model import call_llm, DEFAULT_MODEL
 from dexter.prompts import DEFAULT_SYSTEM_PROMPT, CONTEXT_SELECTION_SYSTEM_PROMPT
 
 
 class ContextManager:
     """Manages context offloading and onloading for tool outputs."""
     
-    def __init__(self, context_dir: str = ".dexter/context"):
+    def __init__(self, context_dir: str = ".dexter/context", model: str = DEFAULT_MODEL):
         """
         Initialize the context manager.
         
         Args:
             context_dir: Directory path for storing context files
+            model: The model to use for LLM calls
         """
         self.context_dir = Path(context_dir)
         self.context_dir.mkdir(parents=True, exist_ok=True)
         self.pointers: List[Dict[str, Any]] = []
+        self.model = model
     
     def _hash_args(self, args: dict) -> str:
         """Generate a hash of tool arguments for filename."""
@@ -67,7 +69,7 @@ class ContextManager:
             response = call_llm(
                 prompt,
                 system_prompt=DEFAULT_SYSTEM_PROMPT,
-                model="gpt-4.1"
+                model=self.model
             )
             summary = response.content if hasattr(response, 'content') else str(response)
             return summary.strip()
@@ -202,7 +204,7 @@ class ContextManager:
                 prompt,
                 system_prompt=CONTEXT_SELECTION_SYSTEM_PROMPT,
                 output_schema=SelectedContexts,
-                model="gpt-4.1"
+                model=self.model
             )
             
             # Extract selected IDs
