@@ -49,3 +49,16 @@ Added standard configuration files for AI agent collaboration and project rules.
     -   `GEMINI.md`: Defined project rules, coding standards, and language preferences (Korean). Added explicit rule to consult `MAINTENANCE.md` for upstream sync.
     -   `AGENTS.md`: Created as a symbolic link to `GEMINI.md` for broader agent compatibility.
 
+## 2025-12-01: Upstream Sync
+
+### Summary
+Synchronized with upstream repository (`virattt/dexter`) and verified compatibility of crypto tools.
+
+### Changes
+1.  **Sync**: Merged `upstream/main` into local `main`.
+2.  **Dependencies**: Updated dependencies via `uv sync`.
+
+### Verification
+-   Ran `verify_upbit.py` and `run_dexter_btc.py`.
+-   Confirmed Bitcoin data fetching works correctly after update.
+
