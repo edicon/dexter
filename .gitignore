@@ -1,3 +1,11 @@
+# LangSmith
+test_langsmith.py
+
+# Firebase / Genkit
+.genkit/
+.spec-workflow/
+firebase-debug.log
+
 # Environment variables
 .env
 .env.local
