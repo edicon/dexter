@@ -18,6 +18,8 @@ from dexter.tools.finance.segments import get_segmented_revenues
 from dexter.tools.search.google import search_google_news
 from dexter.tools.crypto.prices import get_crypto_price_snapshot
 from dexter.tools.crypto.prices import get_crypto_prices
+from dexter.tools.crypto.indicators import calculate_technical_indicators
+from dexter.tools.crypto.volatility import calculate_volatility_metrics
 
 TOOLS: list[Callable[..., any]] = [
     get_income_statements,
@@ -38,4 +40,6 @@ TOOLS: list[Callable[..., any]] = [
     search_google_news,
     get_crypto_price_snapshot,
     get_crypto_prices,
+    calculate_technical_indicators,
+    calculate_volatility_metrics,
 ]
