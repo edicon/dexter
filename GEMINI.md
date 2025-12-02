@@ -113,6 +113,28 @@ agent = Agent(
 ### Logging and Tracing
 Dexter integrates custom logging via `dexter.utils.logger` and supports optional tracing and debugging through LangSmith, configured via environment variables.
 
+## Financial Analysis Rules
+
+### Volatility and Risk Assessment
+When analyzing cryptocurrency or stock volatility:
+1. **Multi-Timeframe Analysis**: Always calculate volatility across multiple timeframes (daily, weekly, monthly)
+2. **Daily Range Calculation**: For each day in the analyzed period, calculate: `((high - low) / low) * 100`
+3. **Separate Metrics**:
+   - **Range Volatility**: `((period_high - period_low) / period_low) * 100`
+   - **Price Change**: `((close - open) / open) * 100`
+4. **Volatility Classification**:
+   - **HIGH**: Range volatility ≥ 3.0% or any single day ≥ 5%
+   - **MODERATE**: Range volatility ≥ 1.5% and < 3.0%
+   - **LOW**: Range volatility < 1.5%
+5. **Recent Data Priority**: Weight recent data (last 3 days) more heavily than older data when making assessments
+6. **Mandatory Checks**: Before concluding "low volatility", verify no individual day exceeded 3% daily range
+
+### Data Validation
+1. **Raw Data Display**: Always show raw price data (open, high, low, close) for each analyzed period
+2. **Calculation Transparency**: Show all intermediate calculations
+3. **Cross-verification**: When possible, verify findings with multiple data sources or timeframes
+
+
 ## Maintenance & Upstream Sync
 - **Sync Guide**: When synchronizing with the upstream repository, you **MUST** consult `MAINTENANCE.md`.
 - **Conflict Resolution**: Follow the specific instructions in `MAINTENANCE.md` for resolving conflicts, especially in `src/dexter/tools/__init__.py`.
